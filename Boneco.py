@@ -2,17 +2,6 @@ import pygame as pg
 from Cores import *
 
 
-def game_over(tela):
-    tela.fill(cor_fundo)
-    font_grande = pg.font.SysFont('comicsansms', 26, bold=True)
-    font_pequena = pg.font.SysFont('comicsansms', 16)
-    pg.draw.line(tela, white, (169, 400), (198, 440), 5)
-    eyes = font_pequena.render('x x', 1, black)
-    tela.blit(eyes, (158, 280))
-    final = font_grande.render('GAME OVER', 1, black)
-    tela.blit(final, (375, 200))
-
-
 def boneco(tela, erros):
     def cabeca():
         pg.draw.circle(tela, white, (169, 295), 20)
@@ -44,7 +33,6 @@ def boneco(tela, erros):
     elif erros == 5:
         p_1()
     elif erros == 6:
-        print('perdeu')
         return True
 
     return False

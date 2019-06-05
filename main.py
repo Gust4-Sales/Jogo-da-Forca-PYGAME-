@@ -1,6 +1,6 @@
-import pygame as pg
-from Cores import *
-from Boneco import *
+from Game_Over import *
+from Ganhou import *
+import random
 
 pg.init()
 screen = pg.display.set_mode((900, 500))
@@ -8,8 +8,10 @@ pg.display.set_caption('JOGO DA FORCA')
 
 
 def palavra_secreta():
-    palavra = 'cuscuz'.upper()
-    return palavra
+    with open('Palavras.txt', 'r') as arq:
+        lista_palavras = arq.readlines()
+        palavra = random.choice(lista_palavras).strip()
+    return palavra.upper()
 
 
 # Tela Padrão que sempre vai ser chamada
@@ -64,7 +66,6 @@ def underscore(palavra, letra = ''):
     linhas = font_pequena.render(''.join(lines), 1, black)
     screen.blit(linhas, (250, 410))
     if '_ ' not in lines:
-        print('ganhou')
         return True
 
     return False
@@ -83,10 +84,12 @@ def game():
         tela_fixa(cor_fundo)
         entrada(chute)
         tentativas()
-        done = underscore(palavra)
+        ganhou = underscore(palavra)
+        if ganhou:
+            return 1, palavra
         perdeu = boneco(screen, erros)
         if perdeu:
-            done = True
+            return 0, palavra
 
         # Checa os eventos in game
         for event in pg.event.get():
@@ -110,4 +113,10 @@ def game():
                         chute = chute[:-1]
         pg.display.update()
 
-game()
+resultado, palavra = game()
+if resultado == 0:
+    print('perdeu')
+    over(screen, palavra)
+else:
+    print('ganhou')
+    win(screen, palavra)
